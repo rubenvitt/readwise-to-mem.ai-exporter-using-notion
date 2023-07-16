@@ -3,6 +3,8 @@ version: '3.8'
 services:
   app:
     build: .
+    entrypoint:
+      - pnpm start
     image: ghcr.io/rubenvitt/readwise-notion-to-mem:latest
     environment:
       - NOTION_TOKEN=${NOTION_TOKEN}
