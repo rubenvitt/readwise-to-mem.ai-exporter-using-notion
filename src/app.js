@@ -60,7 +60,7 @@ async function createMem(content, memId) {
       })
       .then((response) => {
         console.log('Created new mem', response.id);
-        return response;
+        return response.id;
       });
   } else {
     console.log('Updating mem');
