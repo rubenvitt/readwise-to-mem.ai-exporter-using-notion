@@ -2,20 +2,17 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
-const express = require('express');
 const cron = require('node-cron');
 const { Client } = require('@notionhq/client');
 const { MemClient } = require('@mem-labs/mem-node');
 const { requireEnv } = require('./utils');
-const app = express();
 const databaseId = requireEnv('NOTION_DATABASE_ID');
 const propertyNames = {
   memSyncStatus: requireEnv('NOTION_SYNC_STATUS', 'memai-sync-status'),
   memSyncId: requireEnv('NOTION_SYNC_ID', 'memai-sync-id'),
   memSyncDate: requireEnv('NOTION_LAST_SYNC', 'memai-last-sync'),
+  memUrl: requireEnv('NOTION_MEM_URL', 'memai-url'),
 };
-
-const port = process.env.PORT || 3000;
 
 let notionClient = new Client({
   auth: requireEnv('NOTION_TOKEN'),
@@ -64,7 +61,7 @@ async function createMem(content, memId) {
       })
       .then((response) => {
         console.log('Created new mem', response.id);
-        return response.id;
+        return response;
       });
   } else {
     console.log('Updating mem');
@@ -89,25 +86,26 @@ async function createMem(content, memId) {
 async function runExport() {
   let allItemsSize = 0;
   await exportForPage((size) => (allItemsSize += size));
-  console.log(`Finished exporting ${allItemsSize} items.`);
+  console.log(`Finished processing ${allItemsSize} items.`);
 }
 
-async function exportForPage(addSize, nextCursor) {
+async function exportForPage(addSize, startCursor) {
   let { results, has_more, next_cursor } = await notionClient.databases.query({
     database_id: databaseId,
-    start_cursor: nextCursor,
+    start_cursor: startCursor,
   });
   console.log(`run export for ${results.length} elements`);
   addSize(results.length);
   for (const page of results) {
     const startTime = Date.now();
 
-    await exportDatabaseItem(page);
-    await maybeWait1Second(startTime);
+    if (await exportDatabaseItem(page)) {
+      await maybeWait1Second(startTime);
+    }
   }
 
   if (has_more) {
-    await exportForPage(addSize, nextCursor);
+    await exportForPage(addSize, next_cursor);
   }
 }
 
@@ -119,7 +117,6 @@ async function loadPageContent(item) {
     });
   }
 
-  let hasMore = true;
   let nextCursor = undefined;
   let result = [];
   while (true) {
@@ -171,7 +168,7 @@ async function exportDatabaseItem(item) {
     else result.push(textContent);
   }
 
-  await loadPageContent(item)
+  return await loadPageContent(item)
     .then((content) => {
       content.forEach((block) => {
         result.push('\n');
@@ -233,7 +230,9 @@ async function exportDatabaseItem(item) {
         }
       } else {
         console.log(`No need to update ${syncId}`);
+        return false;
       }
+      return true;
     });
 }
 
