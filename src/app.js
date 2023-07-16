@@ -172,8 +172,6 @@ async function exportDatabaseItem(item) {
       content.forEach((block) => {
         result.push('\n');
 
-        console.log('Processing content', content);
-        console.log('processing block', block);
         if (block.type === 'paragraph') {
           block.paragraph.rich_text.forEach((textItem) => {
             pushTextItem(textItem.text);
