@@ -5,8 +5,6 @@ services:
     build:
       context: .
       dockerfile: arm.Dockerfile
-    entrypoint:
-      - pnpm start
     image: ghcr.io/rubenvitt/readwise-notion-to-mem-arm:latest
     environment:
       - NOTION_TOKEN=${NOTION_TOKEN}
