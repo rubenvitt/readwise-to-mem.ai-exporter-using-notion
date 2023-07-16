@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .js",
     "format": "prettier --write ."
@@ -12,7 +13,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "@mem-labs/mem-node": "^0.1.1",
+    "@notionhq/client": "^2.2.7",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "node-cron": "^3.0.2",
+    "nodemon": "^3.0.1"
   },
   "devDependencies": {
     "eslint": "^8.45.0",
