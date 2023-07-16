@@ -11,7 +11,6 @@ const propertyNames = {
   memSyncStatus: requireEnv('NOTION_SYNC_STATUS', 'memai-sync-status'),
   memSyncId: requireEnv('NOTION_SYNC_ID', 'memai-sync-id'),
   memSyncDate: requireEnv('NOTION_LAST_SYNC', 'memai-last-sync'),
-  memUrl: requireEnv('NOTION_MEM_URL', 'memai-url'),
 };
 
 let notionClient = new Client({
@@ -27,13 +26,13 @@ const memClient = new MemClient({
 function mapCategory(category) {
   switch (category) {
     case 'Articles':
-      return 'artikel';
+      return requireEnv('MAPPING_ARTICLES', 'article');
     case 'Books':
-      return 'buch';
+      return requireEnv('MAPPING_BOOKS', 'book');
     case 'Tweets':
-      return 'tweet';
+      return requireEnv('MAPPING_TWEETS', 'tweet');
     case 'Podcasts':
-      return 'podcast';
+      return requireEnv('MAPPING_PODCASTS', 'podcast');
   }
 }
 
@@ -149,7 +148,7 @@ async function exportDatabaseItem(item) {
 
   function pushMetadata() {
     result.push(`# ${title}\n`);
-    result.push('#readwise-import ');
+    result.push(`${requireEnv('DEFAULT_TAGS', '#readwise-import')} `);
     result.push(`#${mapCategory(category)}\n`);
     result.push(`**Author:** @${author}\n`);
     result.push(`**URL:** ${url}\n\n`);

@@ -48,6 +48,12 @@ NOTION_SYNC_ID=database property name ?? memai-sync-id
 NOTION_SYNC_STATUS=database property name ?? memai-sync-status
 NOTION_LAST_SYNC=database property name ?? memai-last-sync
 CRON_SCHEDULE=schedule of exporter-run ?? */15 * * * *
+
+MAPPING_ARTICLES=convert 'Articles' to ?? article
+MAPPING_BOOKS=convert 'Books' to ?? book
+MAPPING_TWEETS=convert 'Tweets' to ?? tweet
+MAPPING_PODCASTS=convert 'Podcasts' to ?? podcast
+DEFAULT_TAGS=tags for each imported item ?? #readwise-import
 ----
 
 == Installation
