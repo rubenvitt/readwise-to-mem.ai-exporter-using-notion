@@ -238,18 +238,13 @@ async function exportDatabaseItem(item) {
     });
 }
 
-cron.schedule('*/15 * * * *', async () => {
-  await runExport();
-});
-
 async function initialize() {
   await runExport(); // run on startup
 
-  console.log(
-    'Creating cron with schedule',
-    requireEnv('CRON_SCHEDULE', '*/15 * * * *'),
-  );
-  cron.schedule('*/15 * * * *', async () => {
+  const cronSchedule = requireEnv('CRON_SCHEDULE', '*/15 * * * *');
+  console.log('Creating cron with schedule', cronSchedule);
+
+  cron.schedule(cronSchedule, async () => {
     await runExport();
   });
 }
