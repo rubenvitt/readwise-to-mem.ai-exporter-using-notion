@@ -1,0 +1,65 @@
+= Readwise to mem.ai Exporter
+
+This app exports Readwise highlights from Notion to mem.ai using their APIs.
+
+Unfortunately, there is still no official integration today, so you need to your own custom exporter like this one.
+
+== Run & go
+. Prepare `.env` (see below)
+. `docker compose up -d`
+
+== Prerequisites
+
+=== Services
+
+- https://readwise.io[Readwise] account (the source of your highlights).
+- https://notion.so[Notion] account (this app uses a Notion database for synchronization).
+- https://mem.ai[mem.ai] account (this app exports highlights to mem.ai, so... you need a mem.ai account)
+
+=== Readwise
+
+Please set up a https://readwise.io/export/notion/preferences[Notion integration] to Notion.
+
+=== Notion
+
+* You need to create a https://www.notion.so/my-integrations[custom integration].
+Copy the access token to `./.env` -> `NOTION_TOKEN`
+* Open the Readwise database...
+** create a new status with a name of `memai-sync-status` (or a custom one, you may define a different name as `NOTION_SYNC_STATUS` in `./env`)
+** create a new text property with a name of `memai-sync-id` (or a custom one, you may define a different name as `NOTION_SYNC_ID` in `./env`)
+** create a new date property with a name of `memai-last-sync` (or a custom one, you may define a different name as `NOTION_LAST_SYNC` in `./env`)
+
+=== mem.ai
+
+You need to create an https://mem.ai/flows/apihttps://mem.ai/flows/api[API token].
+Copy it to `./env` -> `MEM_TOKEN`
+
+== Configuration
+
+[source,properties]
+----
+#required
+NOTION_TOKEN=your Notion token
+MEM_TOKEN=your mem.ai token
+NOTION_DATABASE_ID=the Readwise database id
+
+# optional
+NOTION_SYNC_ID=database property name ?? memai-sync-id
+NOTION_SYNC_STATUS=database property name ?? memai-sync-status
+NOTION_LAST_SYNC=database property name ?? memai-last-sync
+CRON_SCHEDULE=schedule of exporter-run ?? */15 * * * *
+----
+
+== Installation
+
+`pnpm install` or `docker build -t <tag-name> .` or `docker compose build`
+
+== Run app
+
+=== From Hub
+
+`docker compose up -d`
+
+=== Local Docker file
+
+`pnpm start` or `docker run <tag-name> -d --rm` or `docker compose up -d --build`

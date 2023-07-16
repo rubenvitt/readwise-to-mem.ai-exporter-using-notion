@@ -3,7 +3,7 @@ version: '3.8'
 services:
   app:
     build: .
-    image: imagename/express
+    image: ghcr.io/rubenvitt/readwise-notion-to-mem:latest
     environment:
       - NOTION_TOKEN=${NOTION_TOKEN}
       - MEM_TOKEN=${MEM_TOKEN}
