@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: arm.Dockerfile
+    entrypoint:
+      - pnpm start
+    image: ghcr.io/rubenvitt/readwise-notion-to-mem-arm:latest
+    environment:
+      - NOTION_TOKEN=${NOTION_TOKEN}
+      - MEM_TOKEN=${MEM_TOKEN}
+      - NOTION_DATABASE_ID=${NOTION_DATABASE_ID}
+      - NOTION_SYNC_ID=${NOTION_SYNC_ID}
+      - NOTION_SYNC_STATUS=${NOTION_SYNC_STATUS}
+      - NOTION_LAST_SYNC=${NOTION_LAST_SYNC}
+      - CRON_SCHEDULE=${CRON_SCHEDULE}
