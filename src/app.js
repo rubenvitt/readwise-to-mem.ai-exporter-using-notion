@@ -25,7 +25,6 @@ const memClient = new MemClient({
   apiAccessToken: requireEnv('MEM_TOKEN'),
 });
 
-let allItemsSize = 0;
 //endregion definitions
 
 function mapCategory(category) {
@@ -88,16 +87,18 @@ async function createMem(content, memId) {
 }
 
 async function runExport() {
-  await exportForPage();
+  let allItemsSize = 0;
+  await exportForPage((size) => (allItemsSize += size));
+  console.log(`Finished exporting ${allItemsSize} items.`);
 }
 
-async function exportForPage(nextCursor) {
+async function exportForPage(addSize, nextCursor) {
   let { results, has_more, next_cursor } = await notionClient.databases.query({
     database_id: databaseId,
     start_cursor: nextCursor,
   });
   console.log(`run export for ${results.length} elements`);
-  allItemsSize += results.length;
+  addSize(results.length);
   for (const page of results) {
     const startTime = Date.now();
 
@@ -106,9 +107,7 @@ async function exportForPage(nextCursor) {
   }
 
   if (has_more) {
-    await exportForPage(nextCursor);
-  } else {
-    console.log(`Finished exporting ${allItemsSize} items.`);
+    await exportForPage(addSize, nextCursor);
   }
 }
 
