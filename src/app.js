@@ -178,10 +178,7 @@ async function exportDatabaseItem(item) {
           });
         } else if (block.type === 'image') {
           pushTextItem({
-            content: 'External Image',
-            link: {
-              url: block.image.external.url,
-            },
+            content: block.image.external.url,
           });
         }
       });
