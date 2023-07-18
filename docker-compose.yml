@@ -3,6 +3,7 @@ version: '3.8'
 services:
   app:
     build: .
+    restart: unless-stopped
     image: ghcr.io/rubenvitt/readwise-notion-to-mem:latest
     environment:
       - NOTION_TOKEN=${NOTION_TOKEN}
