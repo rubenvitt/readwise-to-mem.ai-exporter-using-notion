@@ -162,7 +162,9 @@ async function exportDatabaseItem(item) {
   }
 
   function pushTextItem(textItem) {
-    let textContent = textItem.content.replace(/#(\w+)/g, '"#$1"');
+    let textContent = textItem.content
+      .replace(/#(\w+)/g, '"#$1"')
+      .replace('•   ', '- ');
     if (textItem.link) result.push(`[${textContent}](${textItem.link.url})`);
     else result.push(textContent);
   }
