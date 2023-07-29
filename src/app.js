@@ -233,23 +233,21 @@ async function exportDatabaseItem(item) {
 }
 
 async function createDailyNote() {
-  let cron = requireEnv('DAILY_NOTE_CRON', undefined);
-  if (cron) {
-    console.log('create daily note');
-    const content = `# Daily note ${new Date()
-      .toLocaleDateString('de-DE')
-      .split('/')
-      .join('.')}
+  let cron = requireEnv('DAILY_NOTE_CRON');
+  console.log('create daily note');
+  const content = `# Daily note ${new Date()
+    .toLocaleDateString('de-DE')
+    .split('/')
+    .join('.')}
 #notiz #daily
 
 ## Aufgaben für heute
 
 ##Notizen
 `;
-    await memClient.createMem({
-      content,
-    });
-  }
+  await memClient.createMem({
+    content,
+  });
 }
 
 async function initialize() {
@@ -262,7 +260,7 @@ async function initialize() {
     await runExport();
   });
 
-  const daily = requireEnv('DAILY_NOTE_CRON', undefined);
+  const daily = requireEnv('DAILY_NOTE_CRON', null);
 
   if (daily) {
     cron.schedule(daily, async () => {
