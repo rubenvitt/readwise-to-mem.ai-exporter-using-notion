@@ -232,6 +232,26 @@ async function exportDatabaseItem(item) {
     });
 }
 
+async function createDailyNote() {
+  let cron = requireEnv('DAILY_NOTE_CRON', undefined);
+  if (cron) {
+    console.log('create daily note');
+    const content = `# Daily note ${new Date()
+      .toLocaleDateString('de-DE')
+      .split('/')
+      .join('.')}
+#notiz #daily
+
+## Aufgaben für heute
+
+##Notizen
+`;
+    await memClient.createMem({
+      content,
+    });
+  }
+}
+
 async function initialize() {
   await runExport(); // run on startup
 
@@ -241,6 +261,14 @@ async function initialize() {
   cron.schedule(cronSchedule, async () => {
     await runExport();
   });
+
+  const daily = requireEnv('DAILY_NOTE_CRON', undefined);
+
+  if (daily) {
+    cron.schedule(daily, async () => {
+      await createDailyNote();
+    });
+  }
 }
 
 initialize().catch(console.error);
