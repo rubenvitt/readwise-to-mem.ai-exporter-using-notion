@@ -233,7 +233,6 @@ async function exportDatabaseItem(item) {
 }
 
 async function createDailyNote() {
-  let cron = requireEnv('DAILY_NOTE_CRON');
   console.log('create daily note');
   const content = `# Daily note ${new Date()
     .toLocaleDateString('de-DE')
