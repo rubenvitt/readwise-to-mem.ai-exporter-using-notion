@@ -182,6 +182,26 @@ async function exportDatabaseItem(item) {
           pushTextItem({
             content: block.image.external.url,
           });
+        } else if (block.type === 'heading_1') {
+          block.heading_1.rich_text.forEach((textItem) => {
+            pushTextItem('# ' + textItem.text);
+          });
+        } else if (block.type === 'heading_2') {
+          block.heading_2.rich_text.forEach((textItem) => {
+            pushTextItem('# ' + textItem.text);
+          });
+        } else if (block.type === 'heading_3') {
+          block.heading_3.rich_text.forEach((textItem) => {
+            pushTextItem('# ' + textItem.text);
+          });
+        } else if (block.type === 'code') {
+          const lang = block.code.language;
+          const content =
+            '```\n' +
+            block.code.rich_text.map((rt) => rt.plain_text).join('\n') +
+            '\n```';
+
+          pushTextItem(content);
         }
       });
 
