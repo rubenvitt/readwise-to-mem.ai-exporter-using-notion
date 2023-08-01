@@ -283,6 +283,7 @@ async function initialize() {
 
   if (daily) {
     cron.schedule(daily, async () => {
+      console.log('Creating daily cron with schedule', daily);
       await createDailyNote();
     });
   }
