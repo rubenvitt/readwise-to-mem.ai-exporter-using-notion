@@ -25,7 +25,7 @@ Please set up a https://readwise.io/export/notion/preferences[Notion integration
 * You need to create a https://www.notion.so/my-integrations[custom integration].
 Copy the access token to `./.env` -> `NOTION_TOKEN`
 * Open the Readwise database...
-** create a new status with a name of `memai-sync-status` (or a custom one, you may define a different name as `NOTION_SYNC_STATUS` in `./env`)
+** create a new select property with a name of `memai-sync-status` (or a custom one, you may define a different name as `NOTION_SYNC_STATUS` in `./env`) with a possible status `SYNCED`
 ** create a new text property with a name of `memai-sync-id` (or a custom one, you may define a different name as `NOTION_SYNC_ID` in `./env`)
 ** create a new date property with a name of `memai-last-sync` (or a custom one, you may define a different name as `NOTION_LAST_SYNC` in `./env`)
 
